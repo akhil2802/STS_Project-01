@@ -1,0 +1,9 @@
+1685725239162	Delete element
+1685771563641	Rename package 'com.micro.user.service'
+1685771597292	Rename package 'com.micro.user.service.controllers'
+1685771606461	Rename package 'com.micro.user.service.entities'
+1685771617643	Rename package 'com.micro.user.service.exceptions'
+1685771625316	Rename package 'com.micro.user.service.payloads'
+1685771634269	Rename package 'com.micro.user.service.repositories'
+1685771642041	Rename package 'com.micro.user.service.services'
+1685771655183	Rename package 'com.micro.user.service.services.impl'

@@ -1,0 +1,90 @@
+server:
+  port: 8081
+
+spring:
+  application:
+    name: USER-SERVICE
+  datasource:
+    url: jdbc:mysql://localhost:3306/microservices
+    username: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties: 
+      hibernate:
+      dialect: org.hibernate.dialect.MySQLDialect
+  
+  config:
+    import: optional:configserver:http://localhost:8085
+  
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: https://dev-94016314.okta.com/oauth2/default
+      client:
+        registration:
+          my-internal-client:
+            provider: okta
+            authorization-grant-type: client_credentials
+            scope: internal
+            client-id: 0oa9vqh8fnlFAGB0Z5d7
+            client-secret: 8eoSJ4gQmGw2Kliu1QrwudE9izRhbxiO_iG_unHs
+        
+        provider:
+          okta:
+            issuer-uri: https://dev-94016314.okta.com/oauth2/default
+      
+# Actuator for health:
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+  health:
+    circuitbreakers:
+      enabled: true
+  endpoint:
+    health:
+      show-details: always
+      
+# Resilience4j:
+resilience4j:
+  circuitbreaker:
+    instances:
+      ratingHotelBreaker:
+        register-health-indicator: true
+        event-consumer-buffer-size: 10
+        failure-rate-threshold: 50
+        minimum-number-of-calls: 5
+        automatic-transition-from-open-to-half-open-enabled: true
+        wait-duration-in-open-state: 6s
+        permitted-number-of-calls-in-half-open-state: 3
+        sliding-window-size: 10
+        sliding-window-type: COUNT_BASED
+        
+  retry:
+    instances:
+      ratingHotelService:
+        max-attempts: 3
+        wait-duration: 5s
+        
+  ratelimiter:
+    instances:
+      userRateLimiter:
+        limit-refresh-period: 4s
+        limit-for-period: 2
+        timeout-duration: 2s
+        
+# Okta:
+okta:
+  oauth2:
+    issuer: https://dev-94016314.okta.com/oauth2/default
+    audience: api://default
+
+#  profiles:
+#    active: dev
+  

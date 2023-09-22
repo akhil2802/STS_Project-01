@@ -1,0 +1,23 @@
+server:
+  port: 8083
+  
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/ratings_microservice
+    username: postgres
+    password: postgres
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+  application:
+    name: RATING-SERVICE
+  config:
+    import:
+      - optional:configserver:http://localhost:8085    
+      
+# Okta:
+okta:
+  oauth2:
+    issuer: https://dev-94016314.okta.com/oauth2/default
+    audience: api://default
